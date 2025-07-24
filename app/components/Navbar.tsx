@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const navItems = [
   { name: 'aerVerse', href: '/aerverse' },
-  { name: 'aerDock', href: '/aerdock' },
+  { name: 'aerDock', href: '/aerdockk' },
   { name: 'aerWing', href: '/aerwing' },
   { name: 'aerCar', href: '/aercar' },
   { name: 'aerVolt', href: '/aervolt' },
