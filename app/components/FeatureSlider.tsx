@@ -2,10 +2,9 @@
 
 import { useKeenSlider } from 'keen-slider/react'
 import 'keen-slider/keen-slider.min.css'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { motion, useAnimation, useInView } from 'framer-motion'
-import { useEffect } from 'react'
+import { motion, useAnimation, useInView, easeOut } from 'framer-motion'
 
 const features = [
   { title: 'Zero operating emissions', image: '/img-hardware-1.jpg' },
@@ -43,7 +42,7 @@ export default function FeatureSlider() {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: 'easeOut',
+        ease: easeOut, // ✅ use imported easing function
       },
     },
   }
