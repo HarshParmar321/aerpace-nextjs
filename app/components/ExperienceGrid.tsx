@@ -1,5 +1,7 @@
-import React from 'react';
+'use client';
+import React, { useRef } from 'react';
 import Link from 'next/link';
+import { motion, useInView } from 'framer-motion';
 
 const experiences = [
   {
@@ -21,53 +23,86 @@ const experiences = [
 ];
 
 export default function ExperienceGrid() {
+  const headingRef = useRef(null);
+  const isHeadingInView = useInView(headingRef, { once: false, amount: 0.2 });
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl mx-auto py-5">
-      {/* First card: spans two columns on desktop */}
-      <div className="md:col-span-2 bg-[#39383C] rounded-3xl flex flex-col md:flex-row items-center shadow-2xl min-h-[350px] md:min-h-[400px] p-10 mb-2">
-        {/* Text */}
-        <div className="flex-1 flex flex-col justify-center pr-0 md:pr-10">
-          <h3 className="text-white text-2xl md:text-3xl font-semibold mb-4">{experiences[0].title}</h3>
-          <p className="text-white text-xl md:text-2xl mb-8">{experiences[0].description}</p>
-          {experiences[0].button && (
-            <Link
-              href={experiences[0].button.href}
-              className="inline-block bg-white text-black font-semibold px-8 py-3 rounded-full shadow hover:bg-gray-200 transition w-max text-lg"
-            >
-              {experiences[0].button.text}
-            </Link>
-          )}
+    <div className="w-full max-w-6xl mx-auto py-10 px-4">
+      {/* Heading */}
+      <div className="mb-16 px-4 text-center">
+        <motion.h2
+          ref={headingRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isHeadingInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className="mx-auto font-semibold text-[#323237] text-[50px] leading-[50px] max-w-[720px]"
+        >
+          Meet aerWing. An unmanned, <br /> eVTOL transportation fleet.
+        </motion.h2>
+      </div>
+
+      {/* Hero Section (with animation) */}
+      <motion.div
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: false, amount: 0.3 }}
+        className="md:col-span-2 bg-[#333239] rounded-[40px] px-10 py-8 md:py-16 md:px-20 text-white shadow-lg flex flex-col md:flex-row items-center overflow-hidden relative mb-8"
+      >
+        {/* Left Side: Text */}
+        <div className="flex flex-col justify-between w-full md:w-1/2 h-[300px] md:h-[550px] relative z-10">
+          <div>
+            <p className="text-sm mb-4 text-gray-300">{experiences[0].title}</p>
+            <h2 className="text-3xl md:text-5xl font-bold leading-tight">
+              {experiences[0].description}
+            </h2>
+          </div>
+          <div>
+            {experiences[0].button && (
+              <Link
+                href={experiences[0].button.href}
+                className="mt-6 md:mt-0 px-6 py-3 bg-white text-black rounded-full text-base font-medium w-fit inline-block"
+              >
+                {experiences[0].button.text}
+              </Link>
+            )}
+          </div>
         </div>
-        {/* Image */}
-        <div className="flex-1 flex items-center justify-center mt-8 md:mt-0">
+
+        {/* Right Side: Image */}
+        <div className="w-full md:w-1/2 h-[300px] md:h-[550px] flex items-center justify-end relative overflow-visible">
           <img
             src={experiences[0].image}
             alt="Experience"
-            className="object-contain w-full h-56 md:h-80 rounded-2xl"
+            className="w-[200%] max-w-none h-auto object-contain translate-x-34 md:translate-x-22"
           />
         </div>
+      </motion.div>
+
+      {/* Other Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {experiences.slice(1).map((exp, i) => (
+          <motion.div
+            key={exp.title}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: i * 0.15 }}
+            viewport={{ once: false, amount: 0.3 }}
+            className="relative rounded-3xl shadow-xl h-[22rem] md:h-[46rem] flex items-start justify-start overflow-hidden"
+          >
+            <img
+              src={exp.image}
+              alt={exp.title}
+              className="absolute inset-0 w-full h-full object-cover"
+              draggable={false}
+            />
+            <div className="relative z-10 p-8 flex flex-col justify-start items-start h-full w-full">
+              <h3 className="text-white text-xl md:text-2xl font-semibold mb-4">{exp.title}</h3>
+              <p className="text-white text-lg md:text-xl font-extrabold">{exp.description}</p>
+            </div>
+          </motion.div>
+        ))}
       </div>
-      {/* Second row: two cards side by side, image as background, large and sharp */}
-      {experiences.slice(1).map((exp) => (
-        <div
-          key={exp.title}
-          className="relative rounded-3xl shadow-xl h-[22rem] md:h-[46rem] flex items-start justify-start overflow-hidden"
-        >
-          {/* Image as absolutely positioned, covers the card */}
-          <img
-            src={exp.image}
-            alt={exp.title}
-            className="absolute inset-0 w-full h-full object-cover"
-            draggable={false}
-          />
-          {/* Overlay for readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
-          <div className="relative z-10 p-8 flex flex-col justify-start items-start h-full w-full">
-            <h3 className="text-white text-xl md:text-2xl font-semibold mb-4">{exp.title}</h3>
-            <p className="text-white text-lg md:text-xl font-extrabold">{exp.description}</p>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }

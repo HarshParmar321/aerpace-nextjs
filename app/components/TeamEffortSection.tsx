@@ -1,24 +1,52 @@
 'use client';
 
-import { useState } from 'react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import { useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 export default function TeamEffortSection() {
   const [email, setEmail] = useState('');
   const [consent, setConsent] = useState(false);
 
-  return (
-    <section className="bg-[#1c1c1e] text-white px-6 py-24 md:px-20" data-aos="fade-up">
-      <div className="max-w-2xl mx-auto space-y-8">
-        <h2 className="text-4xl sm:text-5xl font-bold leading-tight">
-          Revolution.<br />It’s a team effort.
-        </h2>
-        <p className="text-gray-300 text-lg">
-          We know we can’t do this alone. It takes collaboration and commitment to realize an idea this bold. Join us. Let’s build a new era of flight.
-        </p>
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
 
-        <form className="space-y-6">
+  return (
+    <motion.section
+      ref={sectionRef}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="bg-[#1c1c1e] text-white px-6 py-24 md:px-20"
+    >
+      <div className="max-w-2xl mx-auto space-y-8">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+          className="text-4xl sm:text-5xl font-bold leading-tight"
+        >
+          Revolution.<br />It’s a team effort.
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
+          className="text-gray-300 text-lg"
+        >
+          We know we can’t do this alone. It takes collaboration and commitment to realize an idea this bold. Join us. Let’s build a new era of flight.
+        </motion.p>
+
+        <motion.form
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: 'easeOut', delay: 0.3 }}
+          className="space-y-6"
+          onSubmit={(e) => {
+            e.preventDefault();
+            // handle form submit here
+          }}
+        >
           <div>
             <label htmlFor="email" className="sr-only">Your Email</label>
             <input
@@ -52,8 +80,8 @@ export default function TeamEffortSection() {
           >
             Submit
           </button>
-        </form>
+        </motion.form>
       </div>
-    </section>
+    </motion.section>
   );
 }
